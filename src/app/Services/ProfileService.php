@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileService
@@ -31,5 +32,12 @@ class ProfileService
         ]);
 
         return true;
+    }
+
+    public function passwordUpdate(string $password): ?\Illuminate\Contracts\Auth\Authenticatable
+    {
+        $user = Auth()->user();
+        $update = $user->update(['password' => Hash::make($password)]);
+        return $user;
     }
 }

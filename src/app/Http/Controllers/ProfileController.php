@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileController\GeneralRequest;
+use App\Http\Requests\ProfileController\PasswordRequest;
 use App\Http\Requests\ProfileController\ProfileRequest;
 use App\Services\ProfileService;
 use Illuminate\Http\Request;
@@ -21,5 +22,10 @@ class ProfileController extends Controller
         unset($data['avatar']);
 
         return (new ProfileService())->update($data);
+    }
+
+    public function password(PasswordRequest $request)
+    {
+        return (new ProfileService())->passwordUpdate($request->password);
     }
 }
