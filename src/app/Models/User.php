@@ -23,7 +23,13 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'phone'
+        'phone',
+        'company_name',
+        'subdomain',
+        'currency',
+        'timezone_id',
+        'date_format',
+        'time_format'
     ];
 
     /**
@@ -47,5 +53,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function avatar()
+    {
+        return $this->morphOne(File::class, 'fileable')->where('category', 'avatar');
     }
 }

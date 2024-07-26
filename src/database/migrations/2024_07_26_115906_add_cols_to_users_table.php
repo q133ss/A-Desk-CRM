@@ -14,6 +14,43 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('role_id');
             $table->string('phone');
+
+            $table->string('company_name')->nullable();
+            $table->string('subdomain')->nullable();
+            $table->enum('currency', [
+                'usd',
+                'eur',
+                'rub',
+                'kzt',
+                'gbp',
+                'uah',
+                'byn',
+                'jpy',
+                'hkd',
+                'sgd',
+                'cny',
+                'amd',
+                'kgs',
+                'mdl',
+                'uzs',
+                'pln'
+            ])->default('rub');
+
+            $table->foreignId('timezone_id')->nullable();
+            $table->enum('date_format', [
+                'd.m.Y',
+                'm.d.Y',
+                'd/m/Y',
+                'm/d/Y'
+            ])->default('d.m.Y');
+
+            $table->enum('time_format', [
+                'H:i',
+                'h:i A'
+            ])->default('H:i');
+
+            $table->boolean('show_pennies')->default(true);
+            $table->boolean('show_description')->default(true);
         });
     }
 

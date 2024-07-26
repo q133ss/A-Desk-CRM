@@ -18,3 +18,8 @@ Route::get('/user', function (Request $request) {
 
 Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+
+Route::group(['middleware' => 'auth:sanctum'], function(){
+    Route::post('general/settings', [\App\Http\Controllers\ProfileController::class, 'general']);
+    Route::post('profile', [\App\Http\Controllers\ProfileController::class, 'profile']);
+});
