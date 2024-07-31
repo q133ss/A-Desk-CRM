@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('general/settings', [\App\Http\Controllers\ProfileController::class, 'general']);
     Route::post('profile', [\App\Http\Controllers\ProfileController::class, 'profile']);
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
+    Route::apiResource('entity', \App\Http\Controllers\EntityController::class);
 
     Route::post('password/change', [\App\Http\Controllers\ProfileController::class, 'password']);
 });

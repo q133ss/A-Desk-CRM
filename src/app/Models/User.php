@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'user_to_users', 'owner_id', 'user_id');
     }
+
+    public function entity()
+    {
+        return $this->hasMany(Entity::class, 'user_id', 'id');
+    }
 }
