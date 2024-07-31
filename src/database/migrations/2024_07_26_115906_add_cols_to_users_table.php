@@ -51,6 +51,9 @@ return new class extends Migration
 
             $table->boolean('show_pennies')->default(true);
             $table->boolean('show_description')->default(true);
+
+            $table->boolean('logged_in')->default(true);
+            $table->string('hash')->nullable();
         });
     }
 

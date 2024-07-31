@@ -29,7 +29,8 @@ class User extends Authenticatable
         'currency',
         'timezone_id',
         'date_format',
-        'time_format'
+        'time_format',
+        'logged_in'
     ];
 
     /**
@@ -58,5 +59,11 @@ class User extends Authenticatable
     public function avatar()
     {
         return $this->morphOne(File::class, 'fileable')->where('category', 'avatar');
+    }
+
+    // Пользователи из настроек
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_to_users', 'owner_id', 'user_id');
     }
 }
