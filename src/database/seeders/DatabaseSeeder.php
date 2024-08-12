@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Currency;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Timezone;
@@ -103,6 +104,33 @@ class DatabaseSeeder extends Seeder
                 'name' => $formattedTimezone,
                 'created_at' => now(),
                 'updated_at' => now(),
+            ]);
+        }
+
+        // Валюта
+        $currencies = [
+            'rub',
+            'usd',
+            'eur',
+            'kzt',
+            'gbp',
+            'uah',
+            'byn',
+            'jpy',
+            'hkd',
+            'sgd',
+            'cny',
+            'amd',
+            'kgs',
+            'mdl',
+            'uzs',
+            'pln'
+        ];
+
+        foreach ($currencies as $currency)
+        {
+            Currency::create([
+                'currency' => $currency
             ]);
         }
 

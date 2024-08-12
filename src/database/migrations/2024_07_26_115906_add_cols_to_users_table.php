@@ -17,24 +17,8 @@ return new class extends Migration
 
             $table->string('company_name')->nullable();
             $table->string('subdomain')->nullable();
-            $table->enum('currency', [
-                'usd',
-                'eur',
-                'rub',
-                'kzt',
-                'gbp',
-                'uah',
-                'byn',
-                'jpy',
-                'hkd',
-                'sgd',
-                'cny',
-                'amd',
-                'kgs',
-                'mdl',
-                'uzs',
-                'pln'
-            ])->default('rub');
+
+            $table->foreignId('currency_id')->default(1);
 
             $table->foreignId('timezone_id')->nullable();
             $table->enum('date_format', [

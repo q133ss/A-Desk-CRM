@@ -46,6 +46,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('password/change', [\App\Http\Controllers\ProfileController::class, 'password']);
     Route::apiResource('businessdir', \App\Http\Controllers\BusinessDirectionController::class);
     Route::post('business-directions/sort', [\App\Http\Controllers\BusinessDirectionController::class, 'sort']);
+    Route::apiResource('product', \App\Http\Controllers\ProductController::class);
 });
+
+# TODO CURRENCY_ID у USER , BANK ACCOUNT !!!!
 
 Route::post('/active/{user_id}/{hash}', [\App\Http\Controllers\UserController::class, 'activate'])->name('activate.invite');

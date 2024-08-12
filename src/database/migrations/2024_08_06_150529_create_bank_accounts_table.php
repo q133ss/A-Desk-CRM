@@ -21,24 +21,7 @@ return new class extends Migration
             $table->string('bik')->nullable();
             $table->string('ks')->nullable()->comment('К/с');
             $table->string('number')->nullable()->comment('Номер счета');
-            $table->enum('currency', [
-                'usd',
-                'eur',
-                'rub',
-                'kzt',
-                'gbp',
-                'uah',
-                'byn',
-                'jpy',
-                'hkd',
-                'sgd',
-                'cny',
-                'amd',
-                'kgs',
-                'mdl',
-                'uzs',
-                'pln'
-            ])->default('rub');
+            $table->foreignId('currency_id')->default(1);
 
             $table->foreignId('commission_article_id')->nullable()->comment('Статья комиссии');
             $table->foreignId('return_clause_id')->nullable()->comment('Статья возврата');
