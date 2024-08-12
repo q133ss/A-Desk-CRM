@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BankAccountController\AddGroupRequest;
+use App\Http\Requests\BankAccountController\StoreGroupRequest;
 use App\Http\Requests\BankAccountController\StoreRequest;
 use App\Services\BankAccountService;
 use Illuminate\Http\Request;
@@ -14,6 +16,26 @@ class BankAccountController extends Controller
     public function index()
     {
         return (new BankAccountService())->index();
+    }
+
+    public function getByEntity()
+    {
+        return (new BankAccountService())->getByEntity();
+    }
+
+    public function storeGroup(StoreGroupRequest $request)
+    {
+        return (new BankAccountService())->storeGroup($request->validated());
+    }
+
+    public function addGroup(AddGroupRequest $request)
+    {
+        return (new BankAccountService())->addGroup($request->validated());
+    }
+
+    public function getByGroup()
+    {
+        return (new BankAccountService())->getByGroup();
     }
 
     /**

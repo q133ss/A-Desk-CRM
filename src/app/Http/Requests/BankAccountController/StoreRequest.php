@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'group_id' => 'nullable|exists:groups,id', // TODO
+            'group_id' => 'nullable|exists:bank_account_groups,id',
             'entity_id' => [
                 'required',
                 'exists:entities,id',

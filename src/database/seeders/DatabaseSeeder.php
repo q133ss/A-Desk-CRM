@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Timezone;
+use App\Models\TransactionCategory;
+use App\Models\TransactionItem;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use DateTime;
@@ -20,6 +22,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->alert('Начинаю Seed БД');
+
         $roles = [
             'owner' => [
                 'name' => 'Владелец аккаунта',
@@ -35,7 +39,9 @@ class DatabaseSeeder extends Seeder
             ]
         ];
 
-        foreach ($roles as $slug => $data){
+        $this->command->info('Добавляю роли');
+
+        foreach ($roles as $slug => $data) {
             Role::create([
                 'slug' => $slug,
                 'name' => $data['name'],
@@ -62,11 +68,14 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Удаление данных', 'slug' => 'delete_data']
         ];
 
-        foreach ($permissions as $permission){
+        $this->command->info('Добавляю доступы');
+
+        foreach ($permissions as $permission) {
             Permission::create($permission);
         }
 
-        User::create([
+        $this->command->info('Создаю пользователя');
+        $admin = User::create([
             'name' => 'admin',
             'email' => 'admin@email.net',
             'password' => Hash::make('password'),
@@ -79,6 +88,7 @@ class DatabaseSeeder extends Seeder
 
         $timezones = \DateTimeZone::listIdentifiers();
 
+        $this->command->info('Начинаю создание временных зон');
         foreach ($timezones as $timezone) {
             $dateTime = new DateTime('now', new DateTimeZone($timezone));
             $offset = $dateTime->getOffset();
@@ -95,5 +105,122 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        function getMaxPosition($user_id)
+        {
+            $itemPos = TransactionItem::where('user_id', $user_id)->max('position');
+            $groupPos = TransactionCategory::where('user_id', $user_id)->max('position');
+
+            $itemPos = $itemPos !== null ? $itemPos : 0;
+            $groupPos = $groupPos !== null ? $groupPos : 0;
+
+            return max($itemPos, $groupPos) + 1;
+        }
+
+        $transactionGroups = [
+            [
+                'name' => 'Ввод денег в бизнес',
+                'category' => 'income',
+                'user_id' => $admin->id
+            ],
+            [
+                'name' => 'Кредит',
+                'category' => 'income',
+                'user_id' => $admin->id
+            ],
+            [
+                'name' => 'Ремонт квартир',
+                'category' => 'income',
+                'user_id' => $admin->id
+            ],
+
+            [
+                'name' => 'Зарплата',
+                'category' => 'consumption',
+                'user_id' => $admin->id
+            ],
+            [
+                'name' => 'Налоги',
+                'category' => 'consumption',
+                'user_id' => $admin->id
+            ],
+            [
+                'name' => 'Офис',
+                'category' => 'consumption',
+                'user_id' => $admin->id
+            ],
+        ];
+
+        $this->command->info('Начинаю добавление групп статей операций');
+
+        foreach ($transactionGroups as $group)
+        {
+            $group['position'] = getMaxPosition($admin->id);
+            TransactionCategory::create($group);
+        }
+
+        $transationItems = [
+            [
+                'name' => "Аванс по квартире",
+                'group_id' => TransactionCategory::where('name', 'Ремонт квартир')->pluck('id')->first(),
+                'description' => 'Аванс',
+                'category' => 'income',
+                'type' => 'income_primary_activity'
+            ],
+            [
+                'name' => "Постоплата по квартире",
+                'group_id' => TransactionCategory::where('name', 'Ремонт квартир')->pluck('id')->first(),
+                'description' => 'Постоплата по квартире',
+                'category' => 'income',
+                'type' => 'income_primary_activity'
+            ],
+
+            [
+                'name' => "Бригада оклад",
+                'group_id' => TransactionCategory::where('name', 'Зарплата')->pluck('id')->first(),
+                'description' => 'Оклад',
+                'category' => 'consumption',
+                'type' => 'primary_activity',
+            ],
+            [
+                'name' => "Бригада процент",
+                'group_id' => TransactionCategory::where('name', 'Зарплата')->pluck('id')->first(),
+                'description' => 'Процент',
+                'category' => 'consumption',
+                'type' => 'primary_activity',
+            ],
+            [
+                'name' => "Налог на имущество",
+                'group_id' => TransactionCategory::where('name', 'Налоги')->pluck('id')->first(),
+                'description' => 'Налог',
+                'category' => 'consumption',
+                'type' => 'primary_activity',
+            ],
+            [
+                'name' => "НДС",
+                'group_id' => TransactionCategory::where('name', 'Налоги')->pluck('id')->first(),
+                'description' => 'Налог',
+                'category' => 'consumption',
+                'type' => 'primary_activity',
+            ],
+            [
+                'name' => "Налог на фонд оплаты труда",
+                'group_id' => TransactionCategory::where('name', 'Налоги')->pluck('id')->first(),
+                'description' => 'Налог',
+                'category' => 'consumption',
+                'type' => 'primary_activity',
+            ],
+        ];
+
+        $this->command->info('Начинаю добавление статей операций');
+
+        foreach ($transationItems as $item)
+        {
+            $item['user_id'] = $admin->id;
+            $item['position'] = getMaxPosition($admin->id);
+            TransactionItem::create($item);
+        }
+
+        $this->command->alert('Seed завершен!');
     }
 }

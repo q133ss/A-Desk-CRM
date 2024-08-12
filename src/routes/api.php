@@ -25,7 +25,24 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
     Route::apiResource('entity', \App\Http\Controllers\EntityController::class);
     Route::apiResource('bank/account', \App\Http\Controllers\BankAccountController::class);
+    Route::get('bank/account/get/by/entity', [\App\Http\Controllers\BankAccountController::class, 'getByEntity']);
+    Route::post('bank/account/group', [\App\Http\Controllers\BankAccountController::class, 'storeGroup']);
+    Route::post('bank/account/add/group', [\App\Http\Controllers\BankAccountController::class, 'addGroup']);
+    Route::get('bank/account/get/by/group', [\App\Http\Controllers\BankAccountController::class, 'getByGroup']);
+    # TODO
+    // Делаем статьи операций
+    // Затем в App\Http\Requests\BankAccountController\StoreRequest
+    // Нужно сделать проврки
 
+    // Добавить сортировку DragAndDrop
+    // Добавить создание группы
+    // Добавить список по группам в доходах и расходах
+    Route::apiResource('transaction', \App\Http\Controllers\TransactionController::class);
+    Route::post('/transaction/add/group', [\App\Http\Controllers\TransactionController::class, 'storeGroup']);
+
+    // Группы счетов
+    Route::apiResource('group', \App\Http\Controllers\GroupController::class);
+    Route::apiResource('counterparty', \App\Http\Controllers\CounterpartyGroupController::class);
     Route::post('password/change', [\App\Http\Controllers\ProfileController::class, 'password']);
 });
 
