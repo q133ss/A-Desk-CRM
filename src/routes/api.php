@@ -30,10 +30,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('bank/account/add/group', [\App\Http\Controllers\BankAccountController::class, 'addGroup']);
     Route::get('bank/account/get/by/group', [\App\Http\Controllers\BankAccountController::class, 'getByGroup']);
     # TODO
-    // Делаем статьи операций
-    // Затем в App\Http\Requests\BankAccountController\StoreRequest
-    // Нужно сделать проврки
-
     // Добавить сортировку DragAndDrop
     // Добавить создание группы
     // Добавить список по группам в доходах и расходах
@@ -50,7 +46,5 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('billing-settings', [\App\Http\Controllers\BillingSettingsController::class, 'index']);
     Route::post('billing-settings/{entity_id}', [\App\Http\Controllers\BillingSettingsController::class, 'update']);
 });
-
-# TODO CURRENCY_ID у USER , BANK ACCOUNT !!!!
 
 Route::post('/active/{user_id}/{hash}', [\App\Http\Controllers\UserController::class, 'activate'])->name('activate.invite');

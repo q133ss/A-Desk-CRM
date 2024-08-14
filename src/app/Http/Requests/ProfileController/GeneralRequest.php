@@ -22,12 +22,6 @@ class GeneralRequest extends FormRequest
      */
     public function rules(): array
     {
-        $currencies = [
-            'usd', 'eur', 'rub', 'kzt', 'gbp', 'uah', 'byn',
-            'jpy', 'hkd', 'sgd', 'cny', 'amd', 'kgs', 'mdl',
-            'uzs', 'pln'
-        ];
-
         $date_formats = [
             'd.m.Y',
             'm.d.Y',
@@ -43,7 +37,7 @@ class GeneralRequest extends FormRequest
         return [
             'company_name' => 'required|string|max:255',
             'subdomain' => 'required|string|max:255|unique:users,subdomain',
-            'currency' => ['required','string', Rule::in($currencies)],
+            'currency_id' => ['required','string', 'exists:currencies,id'],
             'timezone_id' => 'required|exists:timezones,id',
             'date_format' => ['required', Rule::in($date_formats)],
             'time_format' => ['required', Rule::in($time_formats)]

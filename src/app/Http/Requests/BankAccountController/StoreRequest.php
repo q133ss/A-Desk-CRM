@@ -3,6 +3,7 @@
 namespace App\Http\Requests\BankAccountController;
 
 use App\Models\Entity;
+use App\Models\TransactionItem;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -42,9 +43,35 @@ class StoreRequest extends FormRequest
             'bik' => 'nullable|string|max:255',
             'ks' => 'nullable|string|max:255',
             'number' => 'nullable|string|max:255',
-            'currency' => 'required|in:usd,eur,rub,kzt,gbp,uah,byn,jpy,hkd,sgd,cny,amd,kgs,mdl,uzs,pln',
-            'commission_article_id' => 'nullable|exists:commission_articles,id', #TODO
-            'return_clause_id' => 'nullable|exists:return_clauses,id', #TODO добавить проверку на статью (вдруг она чужая)!
+            'currency_id' => 'required|exists:currencies,id',
+            'commission_article_id' => [
+                'nullable',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $check = TransactionItem::where('user_id', Auth('sanctum')->id())
+                        ->where('id', $value)
+                        ->exists();
+
+                    if(!$check)
+                    {
+                        $fail('Указана неверная статья комиссии');
+                    }
+                }
+            ],
+            'return_clause_id' => [
+                'nullable',
+                function(string $attribute, mixed $value, Closure $fail): void
+                {
+                    $check = TransactionItem::where('user_id', Auth('sanctum')->id())
+                        ->where('id', $value)
+                        ->exists();
+
+                    if(!$check)
+                    {
+                        $fail('Указана неверная статья возврата');
+                    }
+                }
+            ],
             'initial_amount' => [
                 'nullable',
                 'numeric',
@@ -87,8 +114,8 @@ class StoreRequest extends FormRequest
             'ks.max' => 'Поле "К/с" не должно превышать 255 символов.',
             'number.string' => 'Поле "Номер счета" должно быть строкой.',
             'number.max' => 'Поле "Номер счета" не должно превышать 255 символов.',
-            'currency.required' => 'Поле "Валюта" обязательно для заполнения.',
-            'currency.in' => 'Поле "Валюта" должно быть одним из следующих значений: usd, eur, rub, kzt, gbp, uah, byn, jpy, hkd, sgd, cny, amd, kgs, mdl, uzs, pln.',
+            'currency_id.required' => 'Поле "Валюта" обязательно для заполнения.',
+            'currency_id.exists' => 'Указанно неверное значение в поле "Валюта"',
             'commission_article_id.exists' => 'Выбранная статья комиссии не существует.',
             'return_clause_id.exists' => 'Выбранная статья возврата не существует.',
             'initial_amount.numeric' => 'Поле "Начальный остаток" должно быть числом.',
