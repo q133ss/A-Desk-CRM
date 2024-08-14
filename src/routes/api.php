@@ -47,6 +47,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::apiResource('businessdir', \App\Http\Controllers\BusinessDirectionController::class);
     Route::post('business-directions/sort', [\App\Http\Controllers\BusinessDirectionController::class, 'sort']);
     Route::apiResource('product', \App\Http\Controllers\ProductController::class);
+    Route::get('billing-settings', [\App\Http\Controllers\BillingSettingsController::class, 'index']);
+    Route::post('billing-settings/{entity_id}', [\App\Http\Controllers\BillingSettingsController::class, 'update']);
 });
 
 # TODO CURRENCY_ID у USER , BANK ACCOUNT !!!!

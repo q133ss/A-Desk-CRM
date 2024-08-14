@@ -9,4 +9,9 @@ class Entity extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function billing()
+    {
+        return $this->hasOne(BillingSetting::class, 'entity_id', 'id');
+    }
 }
