@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use App\Traits\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -70,5 +71,16 @@ class User extends Authenticatable
     public function entity()
     {
         return $this->hasMany(Entity::class, 'user_id', 'id');
+    }
+
+    public function scopeWithFilter($query, $request)
+    {
+        return $query
+            ->when(
+                $request->query('active'),
+                function (Builder $query, $active) {
+                    return $query->where('logged_in', $active);
+                }
+            );
     }
 }

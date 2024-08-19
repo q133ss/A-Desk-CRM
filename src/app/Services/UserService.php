@@ -39,11 +39,11 @@ class UserService
 
         if($role->id != Role::where('slug', 'custom')->pluck('id')->first()){
             foreach ($role->permissions as $permission){
-                $permission[] = $permission;
+                $permissions[] = $permission;
             }
         }else{
-            foreach ($request->permission as $permission){
-                $permission[] = $permission;
+            foreach ($request->permissions as $permission){
+                $permissions[] = $permission;
             }
         }
 

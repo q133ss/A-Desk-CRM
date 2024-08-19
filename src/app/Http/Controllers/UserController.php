@@ -7,6 +7,7 @@ use App\Http\Requests\UserController\UpdateRequest;
 use App\Mail\WellcomeUserMail;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Permission;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Auth('sanctum')->user()->users;
+        return Auth('sanctum')->user()->users()->withFilter($request)->get();
     }
 
     /**
@@ -35,6 +36,11 @@ class UserController extends Controller
     public function activate($user_id, $hash)
     {
         return (new UserService())->activate($user_id, $hash);
+    }
+
+    public function permissions()
+    {
+        return Permission::get();
     }
 
     /**

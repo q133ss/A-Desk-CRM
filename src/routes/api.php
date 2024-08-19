@@ -21,14 +21,22 @@ Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('general/settings', [\App\Http\Controllers\ProfileController::class, 'general']);
+    Route::get('/currency', [\App\Http\Controllers\ProfileController::class, 'currency']);
+    Route::get('/timezones', [\App\Http\Controllers\ProfileController::class, 'timezones']);
+    Route::get('/me', [\App\Http\Controllers\ProfileController::class, 'me']);
     Route::post('profile', [\App\Http\Controllers\ProfileController::class, 'profile']);
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
+    Route::get('/permissions', [\App\Http\Controllers\UserController::class, 'permissions']);
     Route::apiResource('entity', \App\Http\Controllers\EntityController::class);
     Route::apiResource('bank/account', \App\Http\Controllers\BankAccountController::class);
     Route::get('bank/account/get/by/entity', [\App\Http\Controllers\BankAccountController::class, 'getByEntity']);
     Route::post('bank/account/group', [\App\Http\Controllers\BankAccountController::class, 'storeGroup']);
     Route::post('bank/account/add/group', [\App\Http\Controllers\BankAccountController::class, 'addGroup']);
     Route::get('bank/account/get/by/group', [\App\Http\Controllers\BankAccountController::class, 'getByGroup']);
+
+    Route::get('/bank/account/get/groups', [\App\Http\Controllers\BankAccountController::class, 'getGroups']);
+    Route::get('/back/account/get/articles', [\App\Http\Controllers\BankAccountController::class, 'getArticles']);
+
     # TODO
     // Добавить сортировку DragAndDrop
     // Добавить создание группы

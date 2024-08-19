@@ -6,6 +6,8 @@ use App\Http\Requests\BankAccountController\AddGroupRequest;
 use App\Http\Requests\BankAccountController\StoreGroupRequest;
 use App\Http\Requests\BankAccountController\StoreRequest;
 use App\Services\BankAccountService;
+use App\Models\BankAccountGroup;
+use App\Models\TransactionCategory;
 use Illuminate\Http\Request;
 
 class BankAccountController extends Controller
@@ -36,6 +38,16 @@ class BankAccountController extends Controller
     public function getByGroup()
     {
         return (new BankAccountService())->getByGroup();
+    }
+
+    public function getGroups()
+    {
+        return BankAccountGroup::get();
+    }
+
+    public function getArticles()
+    {
+        return TransactionCategory::get();
     }
 
     /**

@@ -36,8 +36,8 @@ class GeneralRequest extends FormRequest
 
         return [
             'company_name' => 'required|string|max:255',
-            'subdomain' => 'required|string|max:255|unique:users,subdomain',
-            'currency_id' => ['required','string', 'exists:currencies,id'],
+            'subdomain' => 'required|string|max:255|unique:users,subdomain,'.Auth('sanctum')->id(),
+            'currency_id' => ['required', 'exists:currencies,id'],
             'timezone_id' => 'required|exists:timezones,id',
             'date_format' => ['required', Rule::in($date_formats)],
             'time_format' => ['required', Rule::in($time_formats)]
